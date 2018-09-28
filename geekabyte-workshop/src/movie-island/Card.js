@@ -25,10 +25,6 @@ class Card extends Component {
     }
   }
 
-  componentDidUpdate() {
-    console.log(this.props.data.overview);
-  }
-
   render() {
     const { data } = this.props;
     if (!data) {
