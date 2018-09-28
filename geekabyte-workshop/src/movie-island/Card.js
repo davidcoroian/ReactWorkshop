@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-
+import styles from "./styles.css";
 import starSVG from "./star.svg";
 
 const langMap = {
@@ -9,11 +9,28 @@ const langMap = {
 class Card extends Component {
   constructor() {
     super();
+    this.state = { descStatus: "closed" };
+    this.onShowMoreClick = this.onShowMoreClick.bind(this);
+  }
+
+  onShowMoreClick() {
+    if (this.state.descStatus === "closed") {
+      this.setState({
+        descStatus: "open"
+      });
+    } else {
+      this.setState({
+        descStatus: "closed"
+      });
+    }
+  }
+
+  componentDidUpdate() {
+    console.log(this.props.data.overview);
   }
 
   render() {
     const { data } = this.props;
-    console.log(data);
     if (!data) {
       return;
     }
@@ -34,7 +51,20 @@ class Card extends Component {
             <img src={starSVG} />
             {data.vote_average}
           </div>
-          <div className="card-desc">{data.overview}</div>
+          <div className="card-desc">
+            {this.state.descStatus === "closed"
+              ? data.overview.slice(0, 120)
+              : data.overview}
+            {data.overview.length > 120 ? (
+              <a
+                className="descLink"
+                href="javascript:void(0);"
+                onClick={this.onShowMoreClick}
+              >
+                {this.state.descStatus === "closed" ? "Show more" : "Show less"}
+              </a>
+            ) : null}
+          </div>
           <div className="card-release">{data.release_data}</div>
         </div>
       </div>
